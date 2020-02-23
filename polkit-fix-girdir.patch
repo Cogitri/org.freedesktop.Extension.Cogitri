@@ -1,0 +1,37 @@
+diff --git a/src/polkit/Makefile.am b/src/polkit/Makefile.am
+index ca36355..ec3336e 100644
+--- a/src/polkit/Makefile.am
++++ b/src/polkit/Makefile.am
+@@ -109,10 +109,10 @@ INTROSPECTION_GIRS = Polkit-1.0.gir
+ 
+ Polkit-1.0.gir: libpolkit-gobject-1.la
+ 
+-girdir = $(INTROSPECTION_GIRDIR)
++girdir = $(datadir)/gir-1.0
+ gir_DATA = Polkit-1.0.gir
+ 
+-typelibsdir = $(INTROSPECTION_TYPELIBDIR)
++typelibsdir = $(libdir)/girepository-1.0
+ typelibs_DATA = Polkit-1.0.typelib
+ 
+ Polkit_1_0_gir_INCLUDES = Gio-2.0
+diff --git a/src/polkitagent/Makefile.am b/src/polkitagent/Makefile.am
+index 49720db..228dbbe 100644
+--- a/src/polkitagent/Makefile.am
++++ b/src/polkitagent/Makefile.am
+@@ -115,12 +115,12 @@ polkit_agent_helper_1_LDFLAGS =                           
+        \
+ 
+ if HAVE_INTROSPECTION
+ 
+-girdir = $(INTROSPECTION_GIRDIR)
++girdir = $(datadir)/gir-1.0
+ gir_DATA = PolkitAgent-1.0.gir
+ 
+ PolkitAgent-1.0.gir: libpolkit-agent-1.la
+ 
+-typelibsdir = $(INTROSPECTION_TYPELIBDIR)
++typelibsdir = $(libdir)/girepository-1.0
+ typelibs_DATA = PolkitAgent-1.0.typelib
+ 
+ INTROSPECTION_COMPILER_ARGS = --includedir=../../src/polkit

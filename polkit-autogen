@@ -1,0 +1,5 @@
+#!/bin/sh
+
+gtkdocize --flavour no-tmpl
+intltoolize --automake --copy --force
+autoreconf -if

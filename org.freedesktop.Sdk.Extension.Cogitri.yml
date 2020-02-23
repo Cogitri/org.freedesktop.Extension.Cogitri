@@ -1,0 +1,145 @@
+app-id: org.freedesktop.Sdk.Extension.Cogitri
+branch: '19.08'
+runtime: org.freedesktop.Sdk
+runtime-version: '19.08'
+sdk: org.freedesktop.Sdk
+sdk-extensions:
+    - org.freedesktop.Sdk.Extension.ldc2
+build-extension: true
+separate-locales: false
+appstream-compose: false
+build-options:
+  prefix: /usr/lib/sdk/Cogitri
+  prepend-path: /usr/lib/sdk/Cogitri/bin:/usr/lib/sdk/ldc2/bin
+  prepend-ld-library-path: /usr/lib/sdk/Cogitri/lib:/usr/lib/sdk/ldc2/lib
+modules:
+  - shared-modules/intltool/intltool-0.51.json
+
+  - name: apk
+    buildsystem: simple
+    build-options:
+      env: { CFLAGS: "-Wno-error" }
+    build-commands:
+      - make SCDOC="" LUAAPK="" SBINDIR=/bin MANDIR=/share/man DOCDIR=/share/doc/apk INCLUDEDIR=/include/apk PKGCONFIGDIR=/lib/pkgconfig DESTDIR=/usr/lib/sdk/Cogitri install
+    sources:
+      - type: archive
+        path: apk-tools-7090ccbd2d1e766ae387fac46800977765536ad5.tar.gz
+        sha256: 043e7fd5e4891f86c91e82a46b4dd49a928c7e2826bd0dafa3c7177f91620977
+
+  - name: libhandy
+    buildsystem: meson
+    config-opts:
+      - -Dprofiling=false
+      - -Dintrospection=enabled
+      - -Dgtk_doc=false
+      - -Dtests=false
+      - -Dexamples=false
+      - -Dvapi=false
+      - -Dglade_catalog=disabled
+      - --prefix=/usr/lib/sdk/Cogitri
+    sources:
+      - type: archive
+        url: https://source.puri.sm/Librem5/libhandy/-/archive/v0.0.13/libhandy-v0.0.13.tar.gz
+        sha256: 138bec94e66d15a7a19350b65845d4529bcd969ea913ab3eb438f56fe47d5d37
+
+  - name: vte2.91
+    buildsystem: meson
+    config-opts:
+      - -Ddocs=false
+      - --prefix=/usr/lib/sdk/Cogitri
+      - -Dvapi=false
+    build-options:
+      env: { CXXFLAGS: "-fno-exceptions" }
+    sources:
+      - type: archive
+        url: https://download.gnome.org/sources/vte/0.58/vte-0.58.3.tar.xz
+        sha256: 22dcb54ac2ad1a56ab0a745e16ccfeb383f0b5860b5bfa1784561216f98d4975
+
+  - name: polkit
+    config-opts:
+      - --disable-polkitd
+      - --disable-man-pages
+      - --disable-examples
+      - --enable-introspection
+      - --disable-examples
+      - --disable-libelogind
+      - --disable-libsystemd-login
+      - --with-systemdsystemunitdir=no
+      - --with-authdb=dummy
+      - --with-authfw=none
+      - --with-os-type=debian
+    rm-configure: true
+    sources:
+      - type: archive
+        url: https://www.freedesktop.org/software/polkit/releases/polkit-0.116.tar.gz
+        sha256: 88170c9e711e8db305a12fdb8234fac5706c61969b94e084d0f117d8ec5d34b1
+      - type: patch
+        path: polkit-build-Add-option-to-build-without-polkitd.patch
+      - type: patch
+        path: polkit-fix-girdir.patch
+      - type: file
+        path: polkit-autogen
+        dest-filename: autogen.sh
+
+  - name: openssld
+    buildsystem: simple
+    build-commands:
+      - mkdir -p /usr/lib/sdk/Cogitri/include/d/openssld /usr/lib/sdk/Cogitri/lib/pkgconfig
+      - cp -r deimos /usr/lib/sdk/Cogitri/include/d/openssld/
+      - cp openssld.pc /usr/lib/sdk/Cogitri/lib/pkgconfig
+    sources:
+      - type: archive
+        url: https://github.com/D-Programming-Deimos/openssl/archive/v2.0.1+1.1.0h.tar.gz
+        sha256: ddea73dc34124928795c2886acfc602e0e910577688e21d1134a15bb30832629
+      - type: file
+        path: openssld.pc
+
+  - name: gir-to-d
+    buildsystem: meson
+    config-opts:
+      - --prefix=/usr/lib/sdk/Cogitri
+    sources:
+      - type: archive
+        url: https://github.com/gtkd-developers/gir-to-d/archive/v0.20.0.tar.gz
+        sha256: ef0c5287cce1db98e683dafd438fda5d6e33aae19a5f3441f63a08c38a0dd678
+
+  - name: glibd
+    buildsystem: meson
+    config-opts:
+      - --prefix=/usr/lib/sdk/Cogitri
+    sources:
+      - type: archive
+        url: https://github.com/gtkd-developers/GlibD/archive/v2.1.0.tar.gz
+        sha256: af1885be9c76ff316631bb1871f630fee6ff40f87163faf3f1fa5a14bef2ba38
+
+  - name: polkitd
+    buildsystem: meson
+    config-opts:
+      - -Dgir-dir=/usr/lib/sdk/Cogitri/share/gir-1.0
+    build-options:
+      env: { PKG_CONFIG_PATH: "/app/lib/pkgconfig:/app/share/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig:/usr/lib/sdk/Cogitri/lib/pkgconfig" }
+    sources:
+      - type: git
+        url: https://github.com/Cogitri/polkit-d
+        commit: 33b1bf472fc3fb0e5ea29b27f5cd5b9449f81c25
+
+  - name: apk-toolsd
+    buildsystem: meson
+    build-options:
+      env: { PKG_CONFIG_PATH: "/app/lib/pkgconfig:/app/share/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig:/usr/lib/sdk/Cogitri/lib/pkgconfig" }
+    sources:
+      - type: git
+        url: https://github.com/Cogitri/apk-toolsd/
+        commit: 2d2b48c4ce3288f464d19c2fdf5c7b6af3efcb7a
+
+  - name: scripts
+    buildsystem: simple
+    build-commands:
+      - 'cp enable.sh /usr/lib/sdk/Cogitri'
+    sources:
+      - type: script
+        commands:
+          - 'export PATH=$PATH:/usr/lib/sdk/Cogitri/bin'
+          - 'export PKG_CONFIG_PATH=/usr/lib/sdk/Cogitri/lib/pkgconfig'
+          - 'export LIBRARY_PATH=/usr/lib/sdk/Cogitri/lib'
+        dest-filename: enable.sh

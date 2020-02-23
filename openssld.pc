@@ -1,0 +1,9 @@
+prefix=/usr/lib/sdk/Cogitri
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: openssld
+Description: D bindings for Openssl.
+Version: 1.1.0h
+Requires: openssl
+Cflags: -I${includedir}/d/openssld
