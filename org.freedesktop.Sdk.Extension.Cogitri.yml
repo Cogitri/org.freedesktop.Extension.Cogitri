@@ -4,14 +4,14 @@ runtime: org.freedesktop.Sdk
 runtime-version: '19.08'
 sdk: org.freedesktop.Sdk
 sdk-extensions:
-    - org.freedesktop.Sdk.Extension.ldc2
+    - org.freedesktop.Sdk.Extension.ldc
 build-extension: true
 separate-locales: false
 appstream-compose: false
 build-options:
   prefix: /usr/lib/sdk/Cogitri
-  prepend-path: /usr/lib/sdk/Cogitri/bin:/usr/lib/sdk/ldc2/bin
-  prepend-ld-library-path: /usr/lib/sdk/Cogitri/lib:/usr/lib/sdk/ldc2/lib
+  prepend-path: /usr/lib/sdk/Cogitri/bin:/usr/lib/sdk/ldc/bin
+  prepend-ld-library-path: /usr/lib/sdk/Cogitri/lib:/usr/lib/sdk/ldc/lib
 modules:
   - shared-modules/intltool/intltool-0.51.json
 
@@ -20,7 +20,7 @@ modules:
     build-options:
       env: { CFLAGS: "-Wno-error" }
     build-commands:
-      - make SCDOC="" LUAAPK="" SBINDIR=/bin MANDIR=/share/man DOCDIR=/share/doc/apk INCLUDEDIR=/include/apk PKGCONFIGDIR=/lib/pkgconfig DESTDIR=/usr/lib/sdk/Cogitri install
+      - make SCDOC="" LUAAPK="" SBINDIR=/usr/lib/sdk/Cogitri/bin MANDIR=/usr/lib/sdk/Cogitri/share/man DOCDIR=/usr/lib/sdk/Cogitri/share/doc/apk INCLUDEDIR=/usr/lib/sdk/Cogitri/include/apk PKGCONFIGDIR=/usr/lib/sdk/Cogitri/lib/pkgconfig LIBDIR=/usr/lib/sdk/Cogitri/lib install
     sources:
       - type: archive
         path: apk-tools-7090ccbd2d1e766ae387fac46800977765536ad5.tar.gz
@@ -121,7 +121,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/Cogitri/polkit-d
-        commit: 33b1bf472fc3fb0e5ea29b27f5cd5b9449f81c25
+        commit: a84f6f432298273bd3a9ea60f346769d8566150b
 
   - name: apk-toolsd
     buildsystem: meson
@@ -130,7 +130,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/Cogitri/apk-toolsd/
-        commit: 2d2b48c4ce3288f464d19c2fdf5c7b6af3efcb7a
+        commit: 21ff3b4adb1f4c07d00439edcd0383165b7ca98f
 
   - name: scripts
     buildsystem: simple
