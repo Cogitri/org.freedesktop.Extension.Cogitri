@@ -22,9 +22,9 @@ modules:
     build-commands:
       - make SCDOC="" LUAAPK="" SBINDIR=/usr/lib/sdk/Cogitri/bin MANDIR=/usr/lib/sdk/Cogitri/share/man DOCDIR=/usr/lib/sdk/Cogitri/share/doc/apk INCLUDEDIR=/usr/lib/sdk/Cogitri/include/apk PKGCONFIGDIR=/usr/lib/sdk/Cogitri/lib/pkgconfig LIBDIR=/usr/lib/sdk/Cogitri/lib install
     sources:
-      - type: archive
-        path: apk-tools-7090ccbd2d1e766ae387fac46800977765536ad5.tar.gz
-        sha256: 043e7fd5e4891f86c91e82a46b4dd49a928c7e2826bd0dafa3c7177f91620977
+      - type: git
+        url: https://gitlab.alpinelinux.org/alpine/apk-tools/
+        commit: 104c65ab92c10c5a10447c73544fa3ab3846d072
 
   - name: libhandy
     buildsystem: meson
